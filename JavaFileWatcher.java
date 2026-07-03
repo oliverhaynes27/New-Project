@@ -17,7 +17,10 @@ public class JavaFileWatcher {
 
         while(true) {
             for(WatchEvent<?> event : watchKey.pollEvents() ) {
-                System.out.println("Event type/kind : " + event.kind() + "file affected : " + event.context());
+                System.out.println("Event type/kind : " + event.kind() + "file Name : " + event.context());
+
+            Path file = path.resolve((Path)event.context());
+                System.out.println("Location = " + file.toFile().getAbsolutePath() + "Name = " + file.toFile().getName() + "Timestamp = " + file.toFile().lastModified());
             
             }
         }
