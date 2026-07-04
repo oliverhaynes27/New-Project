@@ -1,5 +1,7 @@
 import java.io.IOException;
 import java.nio.file.*;
+import java.util.ArrayList;
+import java.time.LocalDateTime;
 
 // Required imports for IO Exception and file handling
 
@@ -9,8 +11,9 @@ public class JavaFileWatcher {
 
     // Directory path is created for files in the 'FileTester' folder on my Desktop
 
+    private static ArrayList<EventFormatter> eventHistory = new ArrayList<>();
     public static void main(String[] args) {
-        System.out.println("Watch Service started");
+        System.out.println("Monitoring for file activity in" + directoryPath + "...");
 
     // Main method and print statement to indicate that the Watch Service has started
 
@@ -28,11 +31,28 @@ public class JavaFileWatcher {
             WatchKey key = watchService.take();
 
             for (WatchEvent<?> event : key.pollEvents()) {
+                
                 Path file = path.resolve((Path)event.context());
-                System.out.println("Event : " + event.kind());
-                System.out.println("Location = " + file.toFile().getAbsolutePath());
-                System.out.println("Name = " + file.toFile().getName());
-                System.out.println("Timestamp = " + file.toFile().lastModified());
+
+                long fileSize = 0;
+
+                if (Files.exists(file))
+                {
+                    fileSize = Files.size(file);
+                }
+
+                EventFormatter eventFormatter = new EventFormatter(
+                    event.kind().name(),
+                    file.getFileName().toString(),
+                    LocalDateTime.now(),
+                    file.toAbsolutePath().toString(),
+                    fileSize
+                );
+
+                eventHistory.add(eventFormatter);
+                System.out.println("_______________________________");
+                System.out.println("");
+                System.out.println(eventFormatter);
 
             // Seperated output statements for each event for formatting purposes
             }
