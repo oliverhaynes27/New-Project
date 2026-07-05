@@ -2,12 +2,18 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 // Required imports for IO Exception and file handling
 
 public class JavaFileWatcher {
 
     public static int ID = 1;
+
+    private static final Map<String, PendingModify> pendingMods = new HashMap<>();
+    private static final long DEBOUNCE_MS = 800;
 
     public static final String directoryPath = "C:\\Users\\olive\\OneDrive\\Desktop\\FileTester";
 
@@ -33,8 +39,28 @@ public class JavaFileWatcher {
             WatchKey key = watchService.take();
 
             for (WatchEvent<?> event : key.pollEvents()) {
+
+                if(event.kind() == StandardWatchEventKinds.OVERFLOW) {
+                    continue;
+                }
                 
-                Path file = path.resolve((Path)event.context());
+                Path file = path.resolve((Path) event.context());
+
+                if (event.kind() == StandardWatchEventKinds.ENTRY_MODIFY) 
+                {
+
+                    String fileKey = file.toAbsolutePath().toString();
+
+                    PendingModify existing = pendingMods.get(fileKey);
+
+                    if (existing == null) {
+                        pendingMods.put(fileKey, new PendingModify(fileKey));
+                    } else {
+                        existing.update();
+                    }
+
+                    continue;
+                }
 
                 long fileSize = 0;
 
@@ -61,6 +87,32 @@ public class JavaFileWatcher {
 
             // Seperated output statements for each event for formatting purposes
             }
+
+            long now = System.currentTimeMillis();
+
+            Iterator<Map.Entry<String, PendingModify>> it = pendingMods.entrySet().iterator();
+
+            while (it.hasNext()) {
+                Map.Entry<String, PendingModify> entry = it.next();
+                PendingModify mod = entry.getValue();
+
+                if (now - mod.lastEventTime >= DEBOUNCE_MS) {
+
+                    Path file = Paths.get(mod.filePath);
+                    long size = Files.exists(file) ? Files.size(file) : 0;
+
+                    EventFormatter event = new EventFormatter("ENTRY_MODIFY (x" + mod.count.get() + ")", file.getFileName().toString(), LocalDateTime.now(), file.toAbsolutePath().toString(), size, ID++);
+
+                    eventHistory.add(event);
+
+                    System.out.println("_______________________________");
+                    System.out.println(event);
+
+                    it.remove();
+                }
+            }
+
+
             key.reset();
 
             // Resetting the key, so future events can be watched for
