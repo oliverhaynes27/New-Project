@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 
 public class JavaFileWatcher {
 
+    public static int ID = 1;
+
     public static final String directoryPath = "C:\\Users\\olive\\OneDrive\\Desktop\\FileTester";
 
     // Directory path is created for files in the 'FileTester' folder on my Desktop
@@ -46,10 +48,13 @@ public class JavaFileWatcher {
                     file.getFileName().toString(),
                     LocalDateTime.now(),
                     file.toAbsolutePath().toString(),
-                    fileSize
+                    fileSize,
+                    ID
                 );
 
                 eventHistory.add(eventFormatter);
+                ID++;
+
                 System.out.println("_______________________________");
                 System.out.println("");
                 System.out.println(eventFormatter);
