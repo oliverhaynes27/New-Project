@@ -38,7 +38,7 @@ public class FileWatcherGUI extends JFrame {
                 event.getEventType(),
                 event.getFileName(),
                 event.getEventTime(),
-                event.getFileSize() + "bytes"
+                event.getFileSize() + " bytes"
             });
         });
     }
