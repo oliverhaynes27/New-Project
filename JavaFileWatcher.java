@@ -21,6 +21,8 @@ public class JavaFileWatcher {
 
     private static ArrayList<EventFormatter> eventHistory = new ArrayList<>();
     public static void main(String[] args) {
+
+        FileWatcherGUI gui = new FileWatcherGUI();
         System.out.println("Monitoring for file activity in" + directoryPath + "...");
 
     // Main method and print statement to indicate that the Watch Service has started
