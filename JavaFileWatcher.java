@@ -91,6 +91,7 @@ public class JavaFileWatcher {
                 System.out.println("_______________________________");
                 System.out.println("");
                 System.out.println(eventFormatter);
+                gui.addEvent(eventFormatter);
 
             // Seperated output statements for each event for formatting purposes
             }
