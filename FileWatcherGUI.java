@@ -30,12 +30,16 @@ public class FileWatcherGUI extends JFrame {
 
     public void addEvent(EventFormatter event)
     {
-        tableModel.addRow(new Object[] {
-            event.getID(),
-            event.getEventType(),
-            event.getFileName(),
-            event.getEventTime(),
-            event.getFileSize() + "bytes"
+        
+        SwingUtilities.invokeLater(() -> {
+
+            tableModel.addRow(new Object[] {
+                event.getID(),
+                event.getEventType(),
+                event.getFileName(),
+                event.getEventTime(),
+                event.getFileSize() + "bytes"
+            });
         });
     }
 }
