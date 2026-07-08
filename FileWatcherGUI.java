@@ -1,0 +1,41 @@
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+
+public class FileWatcherGUI extends JFrame {
+
+    private DefaultTableModel tableModel;
+
+    public FileWatcherGUI()
+    {
+        setTitle("Java File Handling Service");
+        setSize(900, 500);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        tableModel = new DefaultTableModel();
+
+        tableModel.addColumn("ID");
+        tableModel.addColumn("Event");
+        tableModel.addColumn("File");
+        tableModel.addColumn("Time");
+        tableModel.addColumn("Size");
+
+        JTable table = new JTable(tableModel);
+
+        add(new JScrollPane(table), BorderLayout.CENTER);
+
+        setVisible(true);
+    }
+
+    public void addEvent(EventFormatter event)
+    {
+        tableModel.addRow(new Object[] {
+            event.getID(),
+            event.getEventType(),
+            event.getFileName(),
+            event.getEventTime(),
+            event.getFileSize() + "bytes"
+        });
+    }
+}

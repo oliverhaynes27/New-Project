@@ -33,7 +33,7 @@ public class EventFormatter
         return fileName;
     }
 
-    public LocalDateTime geteventTime()
+    public LocalDateTime getEventTime()
     {
         return eventTime;
     }
