@@ -23,6 +23,9 @@ public class FileWatcherGUI extends JFrame {
 
         JTable table = new JTable(tableModel);
 
+        java.awt.Font currentFont = table.getTableHeader().getFont();
+        table.getTableHeader().setFont(currentFont.deriveFont(java.awt.Font.BOLD));
+
         add(new JScrollPane(table), BorderLayout.CENTER);
 
         setVisible(true);
