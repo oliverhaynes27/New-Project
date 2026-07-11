@@ -1,3 +1,4 @@
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.ArrayList;
@@ -194,5 +195,35 @@ public class JavaFileWatcher {
         System.out.println("File with most Activity : " + mostActiveFile + " (" + highestCount + " events)");
         System.out.println("=================================");
     }
+
+    public static void exportToCSV() {
+
+    Path output = Paths.get("EventHistory.csv");
+
+    try (BufferedWriter writer = Files.newBufferedWriter(output)) {
+
+        writer.write("ID,Event Type,File Name,Timestamp,File Size,Path");
+        writer.newLine();
+
+        for (EventFormatter event : eventHistory) {
+
+            writer.write(
+                event.getID() + "," +
+                event.getEventType() + "," +
+                event.getFileName() + "," +
+                event.getEventTime() + "," +
+                event.getFileSize() + "," +
+                "\"" + event.getFilePath() + "\""
+            );
+
+            writer.newLine();
+        }
+
+        System.out.println("Event history exported to " + output.toAbsolutePath());
+
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
     
 }
