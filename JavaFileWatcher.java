@@ -200,6 +200,7 @@ public class JavaFileWatcher {
     public static void exportToCSV() {
 
     Path output = Paths.get("EventHistory.csv");
+    System.out.println("CSV saved to: " + output.toAbsolutePath());
 
     try (BufferedWriter writer = Files.newBufferedWriter(output)) {
 
