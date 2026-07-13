@@ -66,7 +66,7 @@ public class JavaFileWatcher {
                 }
                 
                 Path file = currentDir.resolve((Path) event.context());
-                
+
                 String relativePath = root.relativize(file).toString();
 
                 if (event.kind() == StandardWatchEventKinds.ENTRY_CREATE && Files.isDirectory(file)) {
@@ -112,6 +112,7 @@ public class JavaFileWatcher {
                     LocalDateTime.now(),
                     file.toAbsolutePath().toString(),
                     fileSize,
+                    relativePath,
                     ID
                 );
 
@@ -137,9 +138,11 @@ public class JavaFileWatcher {
                 if (now - mod.lastEventTime >= DEBOUNCE_MS) {
 
                     Path file = Paths.get(mod.filePath);
+
+                    String relativePath = root.relativize(file).toString();
                     long size = Files.exists(file) ? Files.size(file) : 0;
 
-                    EventFormatter event = new EventFormatter("ENTRY_MODIFY (x" + mod.count.get() + ")", file.getFileName().toString(), LocalDateTime.now(), file.toAbsolutePath().toString(), size, ID++);
+                    EventFormatter event = new EventFormatter("ENTRY_MODIFY (x" + mod.count.get() + ")", file.getFileName().toString(), LocalDateTime.now(), file.toAbsolutePath().toString(), size, relativePath, ID++);
 
                     eventHistory.add(event);
 

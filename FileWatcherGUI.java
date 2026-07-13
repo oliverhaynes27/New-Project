@@ -19,6 +19,7 @@ public class FileWatcherGUI extends JFrame {
         tableModel.addColumn("Event");
         tableModel.addColumn("File");
         tableModel.addColumn("Time");
+        tableModel.addColumn("Relative Path");
         tableModel.addColumn("Size");
 
         JTable table = new JTable(tableModel);
@@ -41,6 +42,7 @@ public class FileWatcherGUI extends JFrame {
                 event.getEventType(),
                 event.getFileName(),
                 event.getEventTime(),
+                event.getRelativePath(),
                 event.getFileSize() + " bytes"
             });
         });
