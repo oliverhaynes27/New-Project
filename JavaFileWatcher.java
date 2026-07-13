@@ -15,6 +15,7 @@ public class JavaFileWatcher {
 
     private static final Map<String, PendingModify> pendingMods = new HashMap<>();
     private static final long DEBOUNCE_MS = 800;
+    private static final Map<WatchKey, Path> watchKeys = new HashMap<>();
 
     public static final String directoryPath = "C:\\Users\\olive\\OneDrive\\Desktop\\FileTester";
 
@@ -35,9 +36,10 @@ public class JavaFileWatcher {
 
         Path root = Paths.get(directoryPath);
 
-        Files.walk(root).filter(Files::isDirectory).ForEach(dir -> {
+        Files.walk(root).filter(Files::isDirectory).forEach(dir -> {
             try{
-                dir.register(watchService, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE);
+                WatchKey key = dir.register(watchService, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE);
+                watchKeys.put(key, dir);
                 System.out.println("Watching: " + dir);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -55,13 +57,29 @@ public class JavaFileWatcher {
 
             WatchKey key = watchService.take();
 
+            Path currentDir = watchKeys.get(key);
+
             for (WatchEvent<?> event : key.pollEvents()) {
 
                 if(event.kind() == StandardWatchEventKinds.OVERFLOW) {
                     continue;
                 }
                 
-                Path file = path.resolve((Path) event.context());
+                Path file = currentDir.resolve((Path) event.context());
+
+                if (event.kind() == StandardWatchEventKinds.ENTRY_CREATE && Files.isDirectory(file)) {
+
+                    Files.walk(file).filter(Files::isDirectory).forEach(dir -> {
+                        try {
+                            WatchKey newkey = dir.register(watchService, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE);
+                            watchKeys.put(newkey, dir);
+                            System.out.println("Now watching: " + dir);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        
+                    });
+                }
 
                 if (event.kind() == StandardWatchEventKinds.ENTRY_MODIFY) 
                 {
