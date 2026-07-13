@@ -9,17 +9,19 @@ public class EventFormatter
     private LocalDateTime eventTime;
     private String filePath;
     private long fileSize;
+    private String relativePath;
     private int ID;
 
     private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
-    public EventFormatter(String eventType, String fileName, LocalDateTime eventTime, String filePath, long fileSize, int ID)
+    public EventFormatter(String eventType, String fileName, LocalDateTime eventTime, String filePath, long fileSize, String relativePath, int ID)
     {
         this.eventType = eventType;
         this.fileName = fileName;
         this.eventTime = eventTime;
         this.filePath = filePath;
         this.fileSize = fileSize;
+        this.relativePath = relativePath;
         this.ID = ID;
     }
 
@@ -46,6 +48,11 @@ public class EventFormatter
     public long getFileSize()
     {
         return fileSize;
+    }
+
+    public String getRelativePath()
+    {
+        return relativePath;
     }
 
     public int getID()
