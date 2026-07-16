@@ -2,7 +2,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import javax.swing.table.TableRowSorter;
-import javax.swing.RowFilter;
 
 public class FileWatcherGUI extends JFrame {
 
@@ -45,14 +44,11 @@ public class FileWatcherGUI extends JFrame {
         topPanel.add(clearButton);
 
         searchButton.addActionListener(e -> {
-            String text = searchField.getText();
+            performSearch(searchField);
+        });
 
-            if (text.trim().isEmpty()) {
-                sorter.setRowFilter(null);
-            } else 
-            {
-                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text, 2));
-            }
+        searchField.addActionListener(e -> {
+            performSearch(searchField);
         });
 
         clearButton.addActionListener(e -> {
@@ -65,6 +61,18 @@ public class FileWatcherGUI extends JFrame {
         add(new JScrollPane(table), BorderLayout.CENTER);
 
         setVisible(true);
+    }
+
+    private void performSearch(JTextField searchField) 
+    {
+        String text = searchField.getText();
+
+        if (text.trim().isEmpty()) {
+            sorter.setRowFilter(null);
+            } else 
+            {
+                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text, 2));
+            }
     }
 
     public void addEvent(EventFormatter event)
