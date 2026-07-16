@@ -39,7 +39,7 @@ public class FileWatcherGUI extends JFrame {
 
         JPanel topPanel = new JPanel();
 
-        topPanel.add(new JLabel("Search: "));
+        topPanel.add(new JLabel("Search Filename: "));
         topPanel.add(searchField);
         topPanel.add(searchButton);
         topPanel.add(clearButton);
@@ -62,11 +62,6 @@ public class FileWatcherGUI extends JFrame {
         });
 
         add(topPanel, BorderLayout.NORTH);
-        add(new JScrollPane(table), BorderLayout.CENTER);
-
-        setVisible(true);
-
-
         add(new JScrollPane(table), BorderLayout.CENTER);
 
         setVisible(true);
