@@ -35,6 +35,7 @@ public class FileWatcherGUI extends JFrame {
         JTextField searchField = new JTextField(20);
         JButton searchButton = new JButton("Search");
         JButton clearButton = new JButton("Clear");
+        JButton pauseButton = new JButton("Pause Monitoring");
 
         JPanel topPanel = new JPanel();
 

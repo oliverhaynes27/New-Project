@@ -233,6 +233,14 @@ public class JavaFileWatcher {
         System.out.println("=================================");
     }
 
+    public static boolean isPaused() {
+        return paused;
+    }
+
+    public static void setPaused(boolean paused) {
+        JavaFileWatcher.paused = paused;
+    }
+
     public static void exportToCSV() {
 
     Path output = Paths.get("EventHistory.csv");
