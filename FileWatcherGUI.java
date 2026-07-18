@@ -26,6 +26,7 @@ public class FileWatcherGUI extends JFrame {
 
         JTable table = new JTable(tableModel);
         JLabel statusLabel = new JLabel("Status: Monitoring");
+        statusLabel.setForeground(Color.GREEN.darker());
 
         sorter = new TableRowSorter<>(tableModel);
         table.setRowSorter(sorter);
@@ -67,11 +68,13 @@ public class FileWatcherGUI extends JFrame {
                 JavaFileWatcher.setPaused(false);
                 pauseButton.setText("Pause Monitoring");
                 statusLabel.setText("Status: Monitoring");
+                statusLabel.setForeground(Color.GREEN.darker());
             }
             else {
                 JavaFileWatcher.setPaused(true);
                 pauseButton.setText("Resume Monitoring");
                 statusLabel.setText("Status: Paused");
+                statusLabel.setForeground(Color.RED);
             }
         });
 
