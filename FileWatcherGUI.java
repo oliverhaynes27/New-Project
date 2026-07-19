@@ -7,6 +7,7 @@ public class FileWatcherGUI extends JFrame {
 
     private DefaultTableModel tableModel;
     private TableRowSorter<DefaultTableModel> sorter;
+    private JTable table;
 
     public FileWatcherGUI()
     {
@@ -24,12 +25,27 @@ public class FileWatcherGUI extends JFrame {
         tableModel.addColumn("Relative Path");
         tableModel.addColumn("Size");
 
-        JTable table = new JTable(tableModel);
+        table = new JTable(tableModel);
         JLabel statusLabel = new JLabel("Status: Monitoring");
         statusLabel.setForeground(Color.GREEN.darker());
 
         sorter = new TableRowSorter<>(tableModel);
         table.setRowSorter(sorter);
+
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    int row = table.getSelectedRow();
+
+                    if (row != -1) {
+
+                        showEventDetails(row);
+                    }
+                }
+            }
+        });
 
         java.awt.Font currentFont = table.getTableHeader().getFont();
         table.getTableHeader().setFont(currentFont.deriveFont(java.awt.Font.BOLD));
@@ -94,6 +110,21 @@ public class FileWatcherGUI extends JFrame {
             {
                 sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text, 2));
             }
+    }
+
+    private void showEventDetails(int row) {
+        
+        row = table.convertRowIndexToModel(row);
+
+        String message = 
+                   "Event ID: " + tableModel.getValueAt(row,0) + "\n\n" +
+                   "Event Type: " + tableModel.getValueAt(row, 1) + "\n\n" +
+                   "File Name: " + tableModel.getValueAt(row, 2) + "\n\n" +
+                   "Time: " + tableModel.getValueAt(row, 3) + "\n" +
+                   "Relative Path: " + tableModel.getValueAt(row, 4) + "\n" +
+                   "Size: " + tableModel.getValueAt(row, 5);
+
+        JOptionPane.showMessageDialog(this, message, "Event Details", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void addEvent(EventFormatter event)
