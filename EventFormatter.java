@@ -57,6 +57,11 @@ public class EventFormatter
         return relativePath;
     }
 
+    public String getFileExtension()
+    {
+        return fileExtension;
+    }
+
     public int getID()
     {
         return ID;

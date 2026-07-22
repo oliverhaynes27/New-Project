@@ -111,6 +111,11 @@ public class JavaFileWatcher {
                     fileSize = Files.size(file);
                 }
 
+                String fileName = file.getFileName().toString();
+
+                String extension = "None";
+                int dot = fileNsme.lastIndexOf('.');
+
                 EventFormatter eventFormatter = new EventFormatter(
                     event.kind().name(),
                     file.getFileName().toString(),
