@@ -114,7 +114,12 @@ public class JavaFileWatcher {
                 String fileName = file.getFileName().toString();
 
                 String extension = "None";
-                int dot = fileNsme.lastIndexOf('.');
+                int dot = fileName.lastIndexOf('.');
+
+                if (dot > 0 && dot < fileName.length() - 1) 
+                {
+                    extension = fileName.substring(dot + 1);
+                }
 
                 EventFormatter eventFormatter = new EventFormatter(
                     event.kind().name(),
@@ -123,6 +128,7 @@ public class JavaFileWatcher {
                     file.toAbsolutePath().toString(),
                     fileSize,
                     relativePath,
+                    extension,
                     ID
                 );
 
@@ -152,7 +158,16 @@ public class JavaFileWatcher {
                     String relativePath = root.relativize(file).toString();
                     long size = Files.exists(file) ? Files.size(file) : 0;
 
-                    EventFormatter event = new EventFormatter("ENTRY_MODIFY (x" + mod.count.get() + ")", file.getFileName().toString(), LocalDateTime.now(), file.toAbsolutePath().toString(), size, relativePath, ID++);
+                    String fileName = file.getFileName().toString();
+
+                    String extension = "None";
+                    int dot = fileName.lastIndexOf('.');
+                    
+                    if (dot > 0 && dot < fileName.length() - 1) {
+                        extension = fileName.substring(dot + 1);
+                    }
+                    
+                    EventFormatter event = new EventFormatter("ENTRY_MODIFY (x" + mod.count.get() + ")", file.getFileName().toString(), LocalDateTime.now(), file.toAbsolutePath().toString(), size, relativePath, extension, ID++);
 
                     eventHistory.add(event);
 

@@ -10,7 +10,7 @@ public class EventFormatter
     private String filePath;
     private long fileSize;
     private String relativePath;
-    private String FileExtension;
+    private String fileExtension;
     private int ID;
 
     private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
@@ -72,6 +72,7 @@ public class EventFormatter
     {
         return "Event: " + eventType +
                "\nFile: " + fileName +
+               "\nExtension: " + fileExtension +
                "\nTime: " + eventTime.format(FORMAT) +
                "\nPath: " + filePath +
                "\nSize: " + fileSize + " bytes" +
