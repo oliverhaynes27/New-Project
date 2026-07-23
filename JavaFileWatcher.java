@@ -208,6 +208,12 @@ public class JavaFileWatcher {
         int modified = 0;
         int deleted = 0;
 
+        Duration duration = Duration.between(startTime, LocalDateTime.now());
+
+        long hours = duration.toHours();
+        long minutes = duration.toMinutesPart();
+        long seconds = duration.toSecondsPart();
+
         for (EventFormatter event : eventHistory)
         {
 
