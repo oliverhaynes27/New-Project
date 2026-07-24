@@ -79,11 +79,11 @@ public class FileWatcherGUI extends JFrame {
         topPanel.add(statusLabel);
 
         searchButton.addActionListener(e -> {
-            performSearch(searchField);
+            filterTable(searchField, eventFilter);
         });
 
         searchField.addActionListener(e -> {
-            performSearch(searchField);
+            filterTable(searchField, eventFilter);
         });
 
         clearButton.addActionListener(e -> {
@@ -114,16 +114,26 @@ public class FileWatcherGUI extends JFrame {
         setVisible(true);
     }
 
-    private void performSearch(JTextField searchField) 
+    private void filterTable(JTextField searchField, JComboBox<String> eventFilter)
     {
-        String text = searchField.getText();
+        RowFilter<DefaultTableModel, Object> filter = new RowFilter<>() {
 
-        if (text.trim().isEmpty()) {
-            sorter.setRowFilter(null);
-            } else 
-            {
-                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text, 2));
+            @Override
+            public boolean include(Entry<? extends DefaultTableModel, ? extends Object> entry) {
+
+                String file = entry.getStringValue(2).toLowerCase();
+                String event = entry.getStringValue(1);
+                String search = searchField.getText().toLowerCase();
+                String selected = eventFilter.getSelectedItem().toString();
+                boolean filenameMatch = file.contains(search);
+
+                boolean eventMatch = selected.equals("All") || event.equals(selected) || event.startsWith(selected);
+
+                return filenameMatch && eventMatch;
             }
+        };
+
+        sorter.setRowFilter(filter);
     }
 
     private void showEventDetails(int row) {
