@@ -56,6 +56,15 @@ public class FileWatcherGUI extends JFrame {
         JButton clearButton = new JButton("Clear");
         JButton pauseButton = new JButton("Pause Monitoring");
 
+        JComboBox<String> eventFilter = new JComboBox<>(
+            new String[] {
+                "All",
+                "ENTRY_CREATE",
+                "ENTRY_MODIFY",
+                "ENTRY_DELETE"
+            }
+        );
+
         JPanel topPanel = new JPanel();
 
         topPanel.add(new JLabel("Search Filename: "));
